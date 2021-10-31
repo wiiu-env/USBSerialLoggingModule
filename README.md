@@ -4,11 +4,11 @@ It's possible to use a docker image for building. This way you don't need anythi
 
 ```
 # Build docker image (only needed once)
-docker build . -t dynloadpatchmodule-builder
+docker build . -t usbserialloggermodule-builder
 
 # make 
-docker run -it --rm -v ${PWD}:/project dynloadpatchmodule-builder make
+docker run -it --rm -v ${PWD}:/project usbserialloggermodule-builder make
 
 # make clean
-docker run -it --rm -v ${PWD}:/project dynloadpatchmodule-builder make clean
+docker run -it --rm -v ${PWD}:/project usbserialloggermodule-builder make clean
 ```
