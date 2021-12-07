@@ -12,15 +12,8 @@ WUMS_MODULE_INIT_BEFORE_RELOCATION_DONE_HOOK();
 
 extern "C" void SC_0x51();
 
-WUMS_INITIALIZE(args) {
+WUMS_INITIALIZE() {
     WHBLogUdpInit();
-    auto gModuleData = args.module_information;
-    if (gModuleData == nullptr) {
-        OSFatal("USBSerialLogging: Failed to get gModuleData pointer.");
-    }
-    if (gModuleData->version != MODULE_INFORMATION_VERSION) {
-        OSFatal("USBSerialLogging: The module information struct version does not match.");
-    }
 
     // Start syslogging on iosu side
     int mcpFd = IOS_Open("/dev/mcp", (IOSOpenMode) 0);
