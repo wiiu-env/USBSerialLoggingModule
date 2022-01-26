@@ -1,10 +1,9 @@
 #include <wums.h>
 #include <coreinit/ios.h>
-#include <coreinit/debug.h>
 #include <coreinit/cache.h>
 #include <kernel/kernel.h>
-#include <whb/log_udp.h>
 #include "kernel.h"
+#include "logger.h"
 
 WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
 WUMS_MODULE_SKIP_INIT_FINI();
@@ -12,8 +11,7 @@ WUMS_MODULE_SKIP_INIT_FINI();
 extern "C" void SC_0x51();
 
 WUMS_INITIALIZE() {
-    WHBLogUdpInit();
-
+    initLogging();
     // Start syslogging on iosu side
     int mcpFd = IOS_Open("/dev/mcp", (IOSOpenMode) 0);
     if (mcpFd >= 0) {
@@ -35,14 +33,18 @@ WUMS_INITIALIZE() {
 
     // Start iopshell on kernel
     SC_0x51();
+    deinitLogging();
 }
 
 #define IopShell_UserCallback (0x101C400 + 0x1926c)
 #define IopShell_RegisterCallback ((void (*)( uint32_t,uint32_t,uint32_t,uint32_t))(0x101C400 + 0x19638))
 #define IopShell_CreateThread ((void (*)( void))(0x101C400 + 0x19504))
 
-WUMS_APPLICATION_STARTS(){
+WUMS_APPLICATION_STARTS() {
+    initLogging();
+    DEBUG_FUNCTION_LINE("Register IopShell_UserCallback");
     IopShell_RegisterCallback(IopShell_UserCallback, 0x100978f8, 0x10097900, 0x10097c40);
+    DEBUG_FUNCTION_LINE("IopShell create thread");
     IopShell_CreateThread();
+    deinitLogging();
 }
-
