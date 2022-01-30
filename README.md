@@ -1,7 +1,7 @@
 ## Usage
 (`[ENVIRONMENT]` is a placeholder for the actual environment name.)
 
-1. Copy the file into `USBSerialLoggingModule.wms` into `sd:/wiiu/environments/[ENVIRONMENT]/modules`.  
+1. Copy the file `USBSerialLoggingModule.wms` into `sd:/wiiu/environments/[ENVIRONMENT]/modules`.  
 2. Requires the [WUMSLoader](https://github.com/wiiu-env/WUMSLoader) in `sd:/wiiu/environments/[ENVIRONMENT]/modules/setup`.
 
 ## Building using the Dockerfile
