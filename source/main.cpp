@@ -1,9 +1,9 @@
-#include <wums.h>
-#include <coreinit/ios.h>
-#include <coreinit/cache.h>
-#include <kernel/kernel.h>
 #include "kernel.h"
 #include "logger.h"
+#include <coreinit/cache.h>
+#include <coreinit/ios.h>
+#include <kernel/kernel.h>
+#include <wums.h>
 
 WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
 WUMS_MODULE_SKIP_INIT_FINI();
@@ -15,7 +15,7 @@ WUMS_INITIALIZE() {
     // Start syslogging on iosu side
     int mcpFd = IOS_Open("/dev/mcp", (IOSOpenMode) 0);
     if (mcpFd >= 0) {
-        int in = 0xFA; // IPC_CUSTOM_START_USB_LOGGING
+        int in  = 0xFA; // IPC_CUSTOM_START_USB_LOGGING
         int out = 0;
         IOS_Ioctl(mcpFd, 100, &in, sizeof(in), &out, sizeof(out));
         IOS_Close(mcpFd);
@@ -36,9 +36,9 @@ WUMS_INITIALIZE() {
     deinitLogging();
 }
 
-#define IopShell_UserCallback (0x101C400 + 0x1926c)
-#define IopShell_RegisterCallback ((void (*)( uint32_t,uint32_t,uint32_t,uint32_t))(0x101C400 + 0x19638))
-#define IopShell_CreateThread ((void (*)( void))(0x101C400 + 0x19504))
+#define IopShell_UserCallback     (0x101C400 + 0x1926c)
+#define IopShell_RegisterCallback ((void (*)(uint32_t, uint32_t, uint32_t, uint32_t))(0x101C400 + 0x19638))
+#define IopShell_CreateThread     ((void (*)(void))(0x101C400 + 0x19504))
 
 WUMS_APPLICATION_STARTS() {
     initLogging();
