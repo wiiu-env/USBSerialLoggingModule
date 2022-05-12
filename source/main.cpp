@@ -19,6 +19,8 @@ WUMS_INITIALIZE() {
         int out = 0;
         IOS_Ioctl(mcpFd, 100, &in, sizeof(in), &out, sizeof(out));
         IOS_Close(mcpFd);
+    } else {
+        DEBUG_FUNCTION_LINE_ERR("Failed to open /dev/mcp");
     }
 
     // Patch loader.elf to spit out less warnings when loading .rpx built with wut
