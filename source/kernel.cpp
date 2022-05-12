@@ -1,5 +1,8 @@
 #include <cstdint>
 
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+
 #define k_memset               ((void (*)(uint32_t, uint32_t, uint32_t)) 0xfff09d60)
 #define KiReport               ((void (*)(const char *, ...)) 0xfff0ad0c)
 #define IopShell_AsyncCallback (0xfff1b7d8)
@@ -90,3 +93,4 @@ void IopShellInitInternal() {
     }
     KiReport("IopShellInit was successful\n");
 }
+#pragma GCC pop_options
