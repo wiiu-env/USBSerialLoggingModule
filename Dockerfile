@@ -1,6 +1,7 @@
-FROM wiiuenv/devkitppc:20220507
+FROM wiiuenv/devkitppc:20220806
 
-COPY --from=wiiuenv/libkernel:20220211 /artifacts $DEVKITPRO
-COPY --from=wiiuenv/wiiumodulesystem:20220512 /artifacts $DEVKITPRO
+COPY --from=wiiuenv/libkernel:20220904 /artifacts $DEVKITPRO
+COPY --from=wiiuenv/wiiumodulesystem:20220904 /artifacts $DEVKITPRO
+COPY --from=wiiuenv/libmocha:20220903 /artifacts $DEVKITPRO
 
 WORKDIR project
