@@ -3,6 +3,7 @@
 #include <coreinit/cache.h>
 #include <coreinit/ios.h>
 #include <kernel/kernel.h>
+#include <mocha/mocha.h>
 #include <wums.h>
 
 WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
@@ -12,15 +13,16 @@ extern "C" void SC_0x51();
 
 WUMS_INITIALIZE() {
     initLogging();
-    // Start syslogging on iosu side
-    int mcpFd = IOS_Open("/dev/mcp", (IOSOpenMode) 0);
-    if (mcpFd >= 0) {
-        int in  = 0xFA; // IPC_CUSTOM_START_USB_LOGGING
-        int out = 0;
-        IOS_Ioctl(mcpFd, 100, &in, sizeof(in), &out, sizeof(out));
-        IOS_Close(mcpFd);
-    } else {
-        DEBUG_FUNCTION_LINE_ERR("Failed to open /dev/mcp");
+
+    int res;
+    if ((res = Mocha_InitLibrary()) != MOCHA_RESULT_SUCCESS) {
+        DEBUG_FUNCTION_LINE_ERR("Mocha_InitLibrary() failed %d", res);
+        return;
+    }
+
+    if (Mocha_StartUSBLogging(false) != MOCHA_RESULT_SUCCESS) {
+        DEBUG_FUNCTION_LINE_ERR("Mocha_StartUSBLogging failed");
+        return;
     }
 
     // Patch loader.elf to spit out less warnings when loading .rpx built with wut
