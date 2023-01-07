@@ -8,6 +8,7 @@
 
 WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
 WUMS_MODULE_SKIP_INIT_FINI();
+WUMS_DEPENDS_ON(homebrew_kernel);
 
 extern "C" void SC_0x51();
 
