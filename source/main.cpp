@@ -1,5 +1,6 @@
 #include "kernel.h"
 #include "logger.h"
+#include "version.h"
 #include <coreinit/cache.h>
 #include <coreinit/ios.h>
 #include <kernel/kernel.h>
@@ -9,6 +10,8 @@
 WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
 WUMS_MODULE_SKIP_INIT_FINI();
 WUMS_DEPENDS_ON(homebrew_kernel);
+
+#define MODULE_VERSION "v0.1"
 
 extern "C" void SC_0x51();
 
@@ -46,6 +49,7 @@ WUMS_INITIALIZE() {
 #define IopShell_CreateThread     ((void (*)(void))(0x101C400 + 0x19504))
 
 WUMS_APPLICATION_STARTS() {
+    OSReport("Running USBSerialLoggingModule " MODULE_VERSION MODULE_VERSION_EXTRA "\n");
     initLogging();
     DEBUG_FUNCTION_LINE("Register IopShell_UserCallback");
     IopShell_RegisterCallback(IopShell_UserCallback, 0x100978f8, 0x10097900, 0x10097c40);
