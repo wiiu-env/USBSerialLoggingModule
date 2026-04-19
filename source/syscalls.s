@@ -1,5 +1,0 @@
-.global SC_0x51
-SC_0x51:
-	li %r0, 0x5100
-	sc
-blr

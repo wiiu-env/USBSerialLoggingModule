@@ -1,4 +1,3 @@
-#include "kernel.h"
 #include "logger.h"
 #include "version.h"
 #include <coreinit/cache.h>
@@ -11,9 +10,7 @@ WUMS_MODULE_EXPORT_NAME("homebrew_usbseriallogging");
 WUMS_MODULE_SKIP_INIT_FINI();
 WUMS_DEPENDS_ON(homebrew_kernel);
 
-#define MODULE_VERSION "v0.1.1"
-
-extern "C" void SC_0x51();
+#define MODULE_VERSION "v0.1.2"
 
 WUMS_INITIALIZE() {
     initLogging();
@@ -37,23 +34,9 @@ WUMS_INITIALIZE() {
     ICInvalidateRange(reinterpret_cast<void *>(0x0100b800), 0x04);
     ICInvalidateRange(reinterpret_cast<void *>(0x0100b7b8), 0x04);
 
-    KernelPatchSyscall(0x51, (uint32_t) &IopShellInitInternal);
-
-    // Start iopshell on kernel
-    SC_0x51();
     deinitLogging();
 }
 
-#define IopShell_UserCallback     (0x101C400 + 0x1926c)
-#define IopShell_RegisterCallback ((void (*)(uint32_t, uint32_t, uint32_t, uint32_t))(0x101C400 + 0x19638))
-#define IopShell_CreateThread     ((void (*)(void))(0x101C400 + 0x19504))
-
 WUMS_APPLICATION_STARTS() {
     OSReport("Running USBSerialLoggingModule " MODULE_VERSION MODULE_VERSION_EXTRA "\n");
-    initLogging();
-    DEBUG_FUNCTION_LINE("Register IopShell_UserCallback");
-    IopShell_RegisterCallback(IopShell_UserCallback, 0x100978f8, 0x10097900, 0x10097c40);
-    DEBUG_FUNCTION_LINE("IopShell create thread");
-    IopShell_CreateThread();
-    deinitLogging();
 }
